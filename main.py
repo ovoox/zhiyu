@@ -1,24 +1,36 @@
+import aiohttp
 from astrbot.api.event import filter, AstrMessageEvent, MessageEventResult
 from astrbot.api.star import Context, Star, register
 from astrbot.api import logger
+from astrbot.api.message_components import Video
 
-@register("helloworld", "YourName", "一个简单的 Hello World 插件", "1.0.0")
-class MyPlugin(Star):
+@register("beauty-video-plugin", "美女视频", "一款获取美女视频的娱乐插件", "1.0")
+class BeautyVideoPlugin(Star):
     def __init__(self, context: Context):
         super().__init__(context)
-
-    async def initialize(self):
-        """可选择实现异步的插件初始化方法，当实例化该插件类之后会自动调用该方法。"""
+        self.api_url = "http://api.ovoc.cn/api/beautyvideo.php"
     
-    # 注册指令的装饰器。指令名为 helloworld。注册成功后，发送 `/helloworld` 就会触发这个指令，并回复 `你好, {user_name}!`
-    @filter.command("helloworld")
-    async def helloworld(self, event: AstrMessageEvent):
-        """这是一个 hello world 指令""" # 这是 handler 的描述，将会被解析方便用户了解插件内容。建议填写。
-        user_name = event.get_sender_name()
-        message_str = event.message_str # 用户发的纯文本消息字符串
-        message_chain = event.get_messages() # 用户所发的消息的消息链 # from astrbot.api.message_components import *
-        logger.info(message_chain)
-        yield event.plain_result(f"Hello, {user_name}, 你发了 {message_str}!") # 发送一条纯文本消息
+    async def initialize(self):
+        """插件初始化"""
+        logger.info("美女视频插件已加载")
+    
+    @filter.command("美女视频")
+    async def beauty_video(self, event: AstrMessageEvent):
+        """获取美女视频"""
+        try:
+            # 调用API获取视频
+            async with aiohttp.ClientSession() as session:
+                async with session.get(self.api_url) as response:
+                    if response.status == 200:
+                        video_url = await response.text()
+                        # 返回视频消息
+                        yield event.result([Video(url=video_url)])
+                    else:
+                        yield event.plain_result("获取视频失败，请稍后再试")
+        except Exception as e:
+            logger.error(f"获取美女视频出错: {e}")
+            yield event.plain_result("获取视频时发生错误")
 
     async def terminate(self):
-        """可选择实现异步的插件销毁方法，当插件被卸载/停用时会调用。"""
+        """插件销毁"""
+        logger.info("美女视频插件已卸载")
