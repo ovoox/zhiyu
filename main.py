@@ -2,7 +2,7 @@ import aiohttp
 from astrbot.api.event import filter, AstrMessageEvent, MessageEventResult
 from astrbot.api.star import Context, Star, register
 from astrbot.api import logger
-from astrbot.api.message_components import Video
+from astrbot.api.message_components import Comp
 
 @register("beauty-video-plugin", "美女视频", "一款获取美女视频的娱乐插件", "1.0")
 class BeautyVideoPlugin(Star):
@@ -23,10 +23,15 @@ class BeautyVideoPlugin(Star):
                 async with session.get(self.api_url) as response:
                     if response.status == 200:
                         video_url = await response.text()
+                        # 使用正确的Video组件创建方式
+                        video_component = Comp.Video.fromURL(url=video_url)
                         # 返回视频消息
-                        yield event.result([Video(url=video_url)])
+                        yield event.result([video_component])
                     else:
                         yield event.plain_result("获取视频失败，请稍后再试")
+        except aiohttp.ClientError as e:
+            logger.error(f"网络请求出错: {e}")
+            yield event.plain_result("网络请求失败，请检查网络连接")
         except Exception as e:
             logger.error(f"获取美女视频出错: {e}")
             yield event.plain_result("获取视频时发生错误")
