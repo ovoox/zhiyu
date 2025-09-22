@@ -4,6 +4,11 @@
 
 ---
 
+欢迎使用我的机器人哦😘[点我查看](https://https://qun.qq.Com/qunpro/robot/qunshare?biz_type=1&robot_uin=3889263267)
+
+---
+
+
 ## 支持功能：
 
 - QQ空间信息查询
@@ -34,3 +39,4 @@ https://github.com/ovoox/zhiyu-astr
 ##### 例如：
 
 查信息 3260478121
+
