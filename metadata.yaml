@@ -1,5 +1,5 @@
-name: zhiyu-plugin # 这是你的插件的唯一识别名。
+name: zhiyu-astrbot-qqquery # 这是你的插件的唯一识别名。
 desc: 一款查询QQ空间 QQ音乐 QQ基本信息的AstrBot插件 # 插件简短描述
 version: v1.0 # 插件版本号。格式：v1.1.1 或者 v1.1
 author: 知鱼 # 作者
-repo: https://github.com/ovoox/zhiyu-astr # 插件的仓库地址
+repo: https://github.com/ovoox/zhiyu-astrbot-qqquery # 插件的仓库地址
