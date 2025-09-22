@@ -1,36 +1,47 @@
 import os
-import random
-import yaml
+import aiohttp
 from astrbot.api.all import *
 
-PLUGIN_DIR = os.path.join('data', 'plugins', 'astrbot_plugin_answerbook')
-ANSWER_BOOK_FILE = os.path.join(PLUGIN_DIR, 'answer_book.yml')
+PLUGIN_DIR = os.path.join('data', 'plugins', 'astrbot_plugin_spacequery')
+SPACE_API_URL = "http://api.ovoc.cn/api/ckj.php?qq="
 
-@register("answer_book", "浅夏旧入梦", "一个简单的答案之书插件", "1.0.0")
-class AnswerBookPlugin(Star):
+@register("space_query", "知鱼", "查询QQ空间信息的插件", "1.0.0")
+class SpaceQueryPlugin(Star):
     def __init__(self, context: Context):
         super().__init__(context)
-        self.answer_book = self._load_answer_book()
-    def _load_answer_book(self):
-        """加载答案书"""
+    
+    async def _query_space_info(self, qq: str):
+        """查询QQ空间信息"""
         try:
-            with open(ANSWER_BOOK_FILE, 'r', encoding='gbk') as f:
-                return yaml.safe_load(f) or {}
+            async with aiohttp.ClientSession() as session:
+                async with session.get(SPACE_API_URL + qq) as response:
+                    if response.status == 200:
+                        return await response.text()
+                    else:
+                        return f"查询失败，状态码：{response.status}"
         except Exception as e:
-            self.context.logger.error(f"加载答案书失败: {str(e)}")
-            return {}
+            self.context.logger.error(f"查询QQ空间信息失败: {str(e)}")
+            return "查询QQ空间信息时发生错误"
+    
     @event_message_type(EventMessageType.GROUP_MESSAGE)
     async def on_group_message(self, event: AstrMessageEvent):
         """群聊消息处理器"""
         msg = event.message_str.strip()
         msg_id = str(event.message_obj.message_id)
-        #答案书相关
-        if msg.startswith("答案之书"):
-        # 随机选择一个答案
-            answer = random.choice(self.answer_book)
-            answer_text=str(answer)
-            chain = [
-                Reply(id=msg_id),
-                Plain(text=answer_text)
-            ]
-            yield event.chain_result(chain)
+        
+        if msg.startswith("查空间"):
+            parts = msg.split()
+            if len(parts) >= 2 and parts[1].isdigit():
+                qq_number = parts[1]
+                space_info = await self._query_space_info(qq_number)
+                chain = [
+                    Reply(id=msg_id),
+                    Plain(text=space_info)
+                ]
+                yield event.chain_result(chain)
+            else:
+                chain = [
+                    Reply(id=msg_id),
+                    Plain(text="请输入正确的QQ号，例如：查空间 123456")
+                ]
+                yield event.chain_result(chain)
