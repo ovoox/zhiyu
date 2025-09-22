@@ -5,22 +5,19 @@ import base64
 from astrbot.api.all import *
 
 PLUGIN_DIR = os.path.join('data', 'plugins', 'astrbot_plugin_spacequery')
-
-# 加密的API URL（base64编码）
 SPACE_API_URL = base64.b64decode("aHR0cDovL2FwaS5vdm9jLmNuL2FwaS9ja2oucGhwP3FxPQ==").decode()
 INFO_API_URL = base64.b64decode("aHR0cDovL2FwaS5vdm9jLmNuL2FwaS9jeHgucGhwP3FxPQ==").decode()
 MUSIC_API_URL = base64.b64decode("aHR0cDovL2FwaS5vdm9jLmNuL2FwaS9jeXkucGhwP3FxPQ==").decode()
 
 COOLDOWN_TIME = 20  # 冷却时间20秒
-
-@register("space_query", "知鱼", "查询QQ空间、信息和音乐的插件", "1.0.0")
+#请勿修改冷却时间 大量频繁查询会导致查询失败 最终得以玩完 
+@register("space_query", "知鱼", "查询QQ空间 信息和音乐的插件", "1.0.0")
 class SpaceQueryPlugin(Star):
     def __init__(self, context: Context):
         super().__init__(context)
-        self.last_query_time = 0  # 记录上次查询时间
+        self.last_query_time = 0 
     
-    async def _query_api(self, api_url: str, qq: str = ""):
-        """通用API查询方法"""
+    async def _query_api(self, api_url: str, qq: str = ""):     
         try:
             current_time = time.time()
             if current_time - self.last_query_time < COOLDOWN_TIME:
