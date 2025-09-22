@@ -4,7 +4,7 @@
 
 ---
 
-欢迎使用我的机器人哦😘[点我查看](https://https://qun.qq.Com/qunpro/robot/qunshare?biz_type=1&robot_uin=3889263267)
+欢迎使用我的机器人哦😘[点我查看](https://qun.qq.Com/qunpro/robot/qunshare?biz_type=1&robot_uin=3889263267)
 
 ---
 
