@@ -27,21 +27,12 @@ class SpaceQueryPlugin(Star):
     async def on_group_message(self, event: AstrMessageEvent):
         """群聊消息处理器"""
         msg = event.message_str.strip()
-        msg_id = str(event.message_obj.message_id)
         
         if msg.startswith("查空间"):
             parts = msg.split()
             if len(parts) >= 2 and parts[1].isdigit():
                 qq_number = parts[1]
                 space_info = await self._query_space_info(qq_number)
-                chain = [
-                    Reply(id=msg_id),
-                    Plain(text=space_info)
-                ]
-                yield event.chain_result(chain)
+                yield event.chain_result([Plain(text=space_info)])
             else:
-                chain = [
-                    Reply(id=msg_id),
-                    Plain(text="请输入正确的QQ号，例如：查空间 123456")
-                ]
-                yield event.chain_result(chain)
+                yield event.chain_result([Plain(text="请输入正确的QQ号，例如：查空间 123456")])
