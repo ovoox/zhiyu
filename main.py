@@ -9,8 +9,7 @@ SPACE_API_URL = base64.b64decode("aHR0cDovL2FwaS5vY29hLmNuL2FwaS9ja2oucGhwP3FxPQ
 INFO_API_URL = base64.b64decode("aHR0cDovL2FwaS5vY29hLmNuL2FwaS9jeHgucGhwP3FxPQ==").decode()
 MUSIC_API_URL = base64.b64decode("aHR0cDovL2FwaS5vY29hLmNuL2FwaS9jeXkucGhwP3FxPQ==").decode()
 
-COOLDOWN_TIME = 20  # 冷却时间20秒
-#请勿修改冷却时间 大量频繁查询会导致查询失败 最低可保持在15秒内
+COOLDOWN_TIME = 300
 @register("space_query", "知鱼", "查询QQ空间 信息和音乐的插件", "1.0")
 class SpaceQueryPlugin(Star):
     def __init__(self, context: Context):
