@@ -10,7 +10,7 @@ INFO_API_URL = base64.b64decode("aHR0cDovL2FwaS5vY29hLmNuL2FwaS9jeHgucGhwP3FxPQ=
 MUSIC_API_URL = base64.b64decode("aHR0cDovL2FwaS5vY29hLmNuL2FwaS9jeXkucGhwP3FxPQ==").decode()
 
 COOLDOWN_TIME = 300
-@register("space_query", "知鱼", "查询QQ空间 信息和音乐的插件", "1.0")
+@register("zhiyu-astrbot-qqquery", "知鱼", "一款查询QQ空间 QQ音乐 QQ基本信息的AstrBot插件", "1.0")
 class SpaceQueryPlugin(Star):
     def __init__(self, context: Context):
         super().__init__(context)
